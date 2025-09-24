@@ -1,0 +1,68 @@
+Approaches to Solve
+1. HashSet Method (Extra Space)
+Traverse the list while storing visited nodes in a HashSet.
+If we ever visit the same node again → cycle exists.
+Time: O(n)
+Space: O(n)
+
+2. Floyd’s Cycle Detection (Tortoise and Hare) → Optimal
+
+Use two pointers:
+slow moves 1 step at a time.
+fast moves 2 steps at a time.
+If there’s a cycle, eventually slow == fast.
+If fast reaches null, then no cycle.
+Time: O(n)
+Space: O(1)
+
+ Brute Force:
+import java.util.HashSet;
+
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        HashSet<ListNode> visited = new HashSet<>();
+
+        while (head != null) {
+            if (visited.contains(head)) {
+                return true; // cycle detected
+            }
+            visited.add(head);
+            head = head.next;
+        }
+
+        return false; // reached null → no cycle
+    }
+}
+Optimal:
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false; // empty or single node can't form a cycle
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;           // move 1 step
+            fast = fast.next.next;      // move 2 steps
+
+            if (slow == fast) {
+                return true; // cycle detected
+            }
+        }
+
+        return false; // no cycle
+    }
+}
